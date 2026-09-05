@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Restaurant LALIS ÉTOILE — Réservation de table</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,500&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --noir: #0d0b09;
+    --noir-2: #16130f;
+    --or: #c9a24b;
+    --or-clair: #e8d5a3;
+    --ivoire: #f4efe4;
+    --grege: #9a8f7a;
+    --bordeaux: #6f1d24;
+    --bordeaux-clair: #a13e3e;
+    --wave: #4bc3e6;
+    --orange-money: #ff7a00;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  body{
+    background: var(--noir);
+    color: var(--ivoire);
+    font-family: 'Jost', sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .hero{
+    position:relative;
+    padding: 70px 20px 60px;
+    text-align:center;
+    background:
+      radial-gradient(ellipse at 50% -10%, rgba(201,162,75,0.16), transparent 60%),
+      linear-gradient(180deg, var(--noir) 0%, var(--noir-2) 100%);
+    border-bottom: 1px solid rgba(201,162,75,0.35);
+    overflow:hidden;
+  }
+  .hero::before, .hero::after{
+    content:"";
+    position:absolute;
+    top:0; bottom:0;
+    width:1px;
+    background: linear-gradient(180deg, transparent, rgba(201,162,75,0.4), transparent);
+  }
+  .eyebrow{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    letter-spacing:0.35em;
+    text-transform:uppercase;
+    color: var(--or-clair);
+    font-size:13px;
+    margin-bottom:18px;
+    opacity:0.85;
+  }
+  h1.brand{
+    font-family:'Playfair Display', serif;
+    font-weight:900;
+    font-size: clamp(34px, 7vw, 76px);
+    letter-spacing:0.02em;
+    color: var(--ivoire);
+    text-transform:uppercase;
+    line-height:1.05;
+  }
+  h1.brand span{
+    color: var(--or);
+    font-style:italic;
+    font-weight:600;
+    display:block;
+    font-size:0.5em;
+    letter-spacing:0.5em;
+    margin-top:10px;
+  }
+  .rule{
+    width:120px;
+    height:1px;
+    background: var(--or);
+    margin: 26px auto;
+    position:relative;
+  }
+  .rule::before{
+    content:"❖";
+    position:absolute;
+    left:50%; top:50%;
+    transform:translate(-50%,-50%);
+    background: var(--noir-2);
+    color:var(--or);
+    padding:0 12px;
+    font-size:14px;
+  }
+  .hero p.sub{
+    font-family:'Cormorant Garamond', serif;
+    font-size:19px;
+    color: var(--grege);
+    max-width:520px;
+    margin:0 auto;
+  }
+
+  .wrap{
+    max-width: 900px;
+    margin: -40px auto 80px;
+    padding: 0 20px;
+    position:relative;
+    z-index:2;
+  }
+
+  .panel{
+    background: linear-gradient(180deg, #17140f, #100e0b);
+    border: 1px solid rgba(201,162,75,0.28);
+    border-radius: 4px;
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.6);
+  }
+
+  .panel-head{
+    padding: 30px 40px 0;
+    text-align:center;
+  }
+  .panel-head h2{
+    font-family:'Playfair Display', serif;
+    font-size: 26px;
+    font-weight:600;
+    letter-spacing:0.04em;
+  }
+  .panel-head p{
+    color: var(--grege);
+    font-size:14px;
+    margin-top:6px;
+    font-family:'Cormorant Garamond', serif;
+    font-size:17px;
+  }
+
+  form{ padding: 30px 40px 40px; }
+
+  .grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+  }
+  .field{ margin-bottom: 22px; }
+  .field.full{ grid-column: 1 / -1; }
+
+  label{
+    display:block;
+    font-size:11px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color: var(--or-clair);
+    margin-bottom:8px;
+  }
+
+  input[type="text"], input[type="tel"], input[type="date"], input[type="time"], input[type="number"]{
+    width:100%;
+    background: #0c0a08;
+    border: 1px solid rgba(201,162,75,0.3);
+    color: var(--ivoire);
+    padding: 13px 14px;
+    font-family:'Jost', sans-serif;
+    font-size:15px;
+    border-radius:2px;
+    outline:none;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  input:focus{
+    border-color: var(--or);
+    box-shadow: 0 0 0 3px rgba(201,162,75,0.15);
+  }
+  input::placeholder{ color:#5c5648; }
+
+  .options{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .option{
+    position:relative;
+    cursor:pointer;
+  }
+  .option input{ position:absolute; opacity:0; }
+  .option .card{
+    border: 1px solid rgba(201,162,75,0.28);
+    background:#0c0a08;
+    padding:18px 16px;
+    border-radius:3px;
+    transition: border-color .2s, background .2s, transform .15s;
+  }
+  .option .card .name{
+    font-family:'Playfair Display', serif;
+    font-size:17px;
+    color: var(--ivoire);
+  }
+  .option .card .desc{
+    font-size:12.5px;
+    color: var(--grege);
+    margin: 6px 0 12px;
+    font-family:'Cormorant Garamond', serif;
+    font-size:15px;
+  }
+  .option .card .price{
+    font-family:'Playfair Display', serif;
+    font-weight:700;
+    font-size:20px;
+    color: var(--or);
+  }
+  .option input:checked + .card{
+    border-color: var(--or);
+    background: linear-gradient(180deg, rgba(201,162,75,0.10), rgba(201,162,75,0.02));
+    transform: translateY(-2px);
+  }
+  .option:nth-child(2) input:checked + .card{
+    border-color: var(--bordeaux-clair);
+    background: linear-gradient(180deg, rgba(111,29,36,0.20), rgba(111,29,36,0.03));
+  }
+  .option:nth-child(2) .card .price{ color: var(--bordeaux-clair); }
+
+  .pay-options{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .pay-option input{ position:absolute; opacity:0; }
+  .pay-option .card{
+    border: 1px solid rgba(201,162,75,0.28);
+    background:#0c0a08;
+    padding:16px;
+    border-radius:3px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    transition: border-color .2s, background .2s;
+  }
+  .pay-dot{
+    width:14px; height:14px;
+    border-radius:50%;
+    flex-shrink:0;
+  }
+  .pay-option:nth-child(1) .pay-dot{ background: var(--wave); }
+  .pay-option:nth-child(2) .pay-dot{ background: var(--orange-money); }
+  .pay-option input:checked + .card{ border-color: var(--or); background: rgba(201,162,75,0.08); }
+  .pay-option .card .pname{ font-size:15px; }
+  .pay-option .card .psub{ font-size:11.5px; color:var(--grege); }
+
+  .summary{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border-top: 1px solid rgba(201,162,75,0.25);
+    border-bottom: 1px solid rgba(201,162,75,0.25);
+    padding: 18px 4px;
+    margin: 28px 0;
+  }
+  .summary .label{ font-size:12px; letter-spacing:0.12em; text-transform:uppercase; color:var(--grege); }
+  .summary .amount{ font-family:'Playfair Display', serif; font-size:30px; color:var(--or); font-weight:700; }
+
+  button.submit{
+    width:100%;
+    padding:16px;
+    background: var(--or);
+    color: #16130f;
+    border:none;
+    font-family:'Jost', sans-serif;
+    font-weight:600;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    font-size:13.5px;
+    cursor:pointer;
+    border-radius:2px;
+    transition: background .2s, transform .15s;
+  }
+  button.submit:hover{ background: var(--or-clair); transform: translateY(-1px); }
+
+  .error{
+    color: var(--bordeaux-clair);
+    font-size:12.5px;
+    margin-top:-14px;
+    margin-bottom:18px;
+    display:none;
+  }
+
+  .confirm{
+    display:none;
+    padding: 46px 40px 50px;
+    text-align:center;
+  }
+  .seal{
+    width:120px; height:120px;
+    margin: 0 auto 22px;
+    border-radius:50%;
+    border: 2px solid var(--or);
+    display:flex; align-items:center; justify-content:center;
+    position:relative;
+  }
+  .seal::before{
+    content:"";
+    position:absolute;
+    inset:8px;
+    border: 1px dashed rgba(201,162,75,0.5);
+    border-radius:50%;
+  }
+  .seal .mark{
+    font-family:'Playfair Display', serif;
+    font-weight:700;
+    font-size:15px;
+    color: var(--or);
+    letter-spacing:0.05em;
+  }
+  .confirm h3{
+    font-family:'Playfair Display', serif;
+    font-size:24px;
+    margin-bottom:8px;
+  }
+  .confirm > p.lead{
+    color:var(--grege);
+    font-family:'Cormorant Garamond', serif;
+    font-size:17px;
+    margin-bottom:30px;
+  }
+  .recap{
+    text-align:left;
+    max-width:420px;
+    margin:0 auto 30px;
+    border:1px solid rgba(201,162,75,0.25);
+    border-radius:3px;
+    overflow:hidden;
+  }
+  .recap div{
+    display:flex; justify-content:space-between;
+    padding:12px 18px;
+    font-size:14px;
+    border-bottom:1px solid rgba(201,162,75,0.12);
+  }
+  .recap div:last-child{ border-bottom:none; }
+  .recap span:first-child{ color:var(--grege); }
+  .recap span:last-child{ color:var(--ivoire); font-weight:500; }
+  .recap div.total span:last-child{ color:var(--or); font-family:'Playfair Display', serif; font-size:17px; font-weight:700; }
+
+  .pay-instructions{
+    max-width:420px;
+    margin: 0 auto 26px;
+    background: rgba(201,162,75,0.06);
+    border:1px solid rgba(201,162,75,0.25);
+    border-radius:3px;
+    padding:18px 20px;
+    font-size:13.5px;
+    color: var(--grege);
+    text-align:left;
+  }
+  .pay-instructions b{ color: var(--ivoire); }
+
+  .new-res{
+    background:transparent;
+    border:1px solid var(--or);
+    color:var(--or);
+    padding:12px 26px;
+    font-size:12.5px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    cursor:pointer;
+    border-radius:2px;
+  }
+  .new-res:hover{ background: rgba(201,162,75,0.08); }
+
+  footer{
+    text-align:center;
+    padding: 20px;
+    color: #55503f;
+    font-size:11.5px;
+    letter-spacing:0.08em;
+  }
+
+  @media (max-width: 620px){
+    .grid, .options, .pay-options{ grid-template-columns:1fr; }
+    form{ padding: 26px 22px 34px; }
+    .panel-head{ padding: 26px 22px 0; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="eyebrow">Table gastronomique — 5 étoiles</div>
+    <h1 class="brand">Restaurant LALIS<span>Étoile</span></h1>
+    <div class="rule"></div>
+    <p class="sub">Réservez votre table et vivez un moment d'exception, entre raffinement et tradition culinaire.</p>
+  </div>
+
+  <div class="wrap">
+    <div class="panel">
+
+      <div id="formView">
+        <div class="panel-head">
+          <h2>Réserver une table</h2>
+          <p>Remplissez le formulaire ci-dessous pour confirmer votre venue</p>
+        </div>
+
+        <form id="reservationForm" novalidate>
+          <div class="grid">
+            <div class="field">
+              <label for="nom">Nom complet</label>
+              <input type="text" id="nom" placeholder="Ex : Aïcha Diop" required>
+            </div>
+            <div class="field">
+              <label for="tel">Téléphone</label>
+              <input type="tel" id="tel" placeholder="Ex : 77 123 45 67" required>
+            </div>
+          </div>
+
+          <div class="grid">
+            <div class="field">
+              <label for="date">Date du rendez-vous</label>
+              <input type="date" id="date" required>
+            </div>
+            <div class="field">
+              <label for="heure">Heure</label>
+              <input type="time" id="heure" required>
+            </div>
+          </div>
+
+          <div class="field full">
+            <label for="places">Nombre de places pour la table</label>
+            <input type="number" id="places" min="1" max="20" placeholder="Ex : 4" required>
+          </div>
+
+          <div class="field full">
+            <label>Type de table</label>
+            <div class="options">
+              <label class="option">
+                <input type="radio" name="tableType" value="50000" checked>
+                <div class="card">
+                  <div class="name">Table Simple</div>
+                  <div class="desc">Salle principale, ambiance élégante et conviviale.</div>
+                  <div class="price">50 000 FCFA</div>
+                </div>
+              </label>
+              <label class="option">
+                <input type="radio" name="tableType" value="100000">
+                <div class="card">
+                  <div class="name">Table VIP</div>
+                  <div class="desc">Espace privé, service dédié et vue privilégiée.</div>
+                  <div class="price">100 000 FCFA</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="field full">
+            <label>Moyen de paiement</label>
+            <div class="pay-options">
+              <label class="pay-option">
+                <input type="radio" name="payment" value="Wave" checked>
+                <div class="card">
+                  <div class="pay-dot"></div>
+                  <div>
+                    <div class="pname">Wave</div>
+                    <div class="psub">Paiement mobile</div>
+                  </div>
+                </div>
+              </label>
+              <label class="pay-option">
+                <input type="radio" name="payment" value="Orange Money">
+                <div class="card">
+                  <div class="pay-dot"></div>
+                  <div>
+                    <div class="pname">Orange Money</div>
+                    <div class="psub">Paiement mobile</div>
+                  </div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="summary">
+            <span class="label">Montant à régler</span>
+            <span class="amount" id="liveAmount">50 000 FCFA</span>
+          </div>
+
+          <p class="error" id="formError">Merci de remplir tous les champs avant de continuer.</p>
+
+          <button type="submit" class="submit">Confirmer la réservation</button>
+        </form>
+      </div>
+
+      <div id="confirmView" class="confirm">
+        <div class="seal"><div class="mark">LALIS<br>ÉTOILE</div></div>
+        <h3>Réservation enregistrée</h3>
+        <p class="lead">Merci ! Voici le récapitulatif de votre table.</p>
+
+        <div class="recap" id="recapBox"></div>
+
+        <div class="pay-instructions" id="payInstructions"></div>
+
+        <button class="new-res" onclick="resetForm()">Faire une nouvelle réservation</button>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>Restaurant Lalis Étoile — Réservation en ligne</footer>
+
+<script>
+  const form = document.getElementById('reservationForm');
+  const liveAmount = document.getElementById('liveAmount');
+  const tableInputs = document.querySelectorAll('input[name="tableType"]');
+  const formError = document.getElementById('formError');
+
+  function formatFCFA(n){
+    return Number(n).toLocaleString('fr-FR') + ' FCFA';
+  }
+
+  function updateAmount(){
+    const selected = document.querySelector('input[name="tableType"]:checked');
+    liveAmount.textContent = formatFCFA(selected.value);
+  }
+  tableInputs.forEach(r => r.addEventListener('change', updateAmount));
+
+  // Numéros de démonstration : à remplacer par les vrais numéros du restaurant
+  const PAY_NUMBERS = {
+    'Wave': '77 000 00 00',
+    'Orange Money': '78 000 00 00'
+  };
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+
+    const nom = document.getElementById('nom').value.trim();
+    const tel = document.getElementById('tel').value.trim();
+    const date = document.getElementById('date').value;
+    const heure = document.getElementById('heure').value;
+    const places = document.getElementById('places').value;
+    const tableType = document.querySelector('input[name="tableType"]:checked');
+    const payment = document.querySelector('input[name="payment"]:checked').value;
+
+    if(!nom || !tel || !date || !heure || !places){
+      formError.style.display = 'block';
+      return;
+    }
+    formError.style.display = 'none';
+
+    const isVip = tableType.value === '100000';
+    const montant = tableType.value;
+    const dateFormatee = new Date(date + 'T00:00:00').toLocaleDateString('fr-FR', { day:'2-digit', month:'long', year:'numeric' });
+
+    document.getElementById('recapBox').innerHTML = `
+      <div><span>Client</span><span>${nom}</span></div>
+      <div><span>Téléphone</span><span>${tel}</span></div>
+      <div><span>Date</span><span>${dateFormatee}</span></div>
+      <div><span>Heure</span><span>${heure}</span></div>
+      <div><span>Personnes</span><span>${places}</span></div>
+      <div><span>Type de table</span><span>${isVip ? 'VIP' : 'Simple'}</span></div>
+      <div><span>Paiement</span><span>${payment}</span></div>
+      <div class="total"><span>Total à payer</span><span>${formatFCFA(montant)}</span></div>
+    `;
+
+    document.getElementById('payInstructions').innerHTML = `
+      Pour finaliser votre réservation, envoyez <b>${formatFCFA(montant)}</b> via
+      <b>${payment}</b> au numéro <b>${PAY_NUMBERS[payment]}</b>, puis présentez la
+      confirmation de transfert à votre arrivée. Un email ou SMS de confirmation
+      vous sera envoyé sous peu.
+    `;
+
+    document.getElementById('formView').style.display = 'none';
+    document.getElementById('confirmView').style.display = 'block';
+  });
+
+  function resetForm(){
+    form.reset();
+    updateAmount();
+    document.getElementById('confirmView').style.display = 'none';
+    document.getElementById('formView').style.display = 'block';
+  }
+</script>
+
+</body>
+</html>
