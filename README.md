@@ -61,7 +61,7 @@
 
 <div align="center">
 
-[![LinkedIn](https://img.shields.io/badge/-LinkedIn-1A2980?style=for-the-badge&logo=linkedin&logoColor=white)](https://github.com/LalaNdiaye)
+[![LinkedIn](https://img.shields.io/badge/-LinkedIn-1A2980?style=for-the-badge&logo=linkedin&logoColor=white)](#)
 [![Portfolio](https://img.shields.io/badge/-Portfolio-8A2BE2?style=for-the-badge&logo=googlechrome&logoColor=white)](https://statuesque-sunflower-0bd933.netlify.app)
 [![Email](https://img.shields.io/badge/-Email-26D0CE?style=for-the-badge&logo=gmail&logoColor=white)](mailto:ndiayelala201@gmail.com)
 
